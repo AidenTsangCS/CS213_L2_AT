@@ -67,7 +67,7 @@ public class Main {
         return n;
     }
 
-  
+
     static void computeProduct(int i, int n, long product) {
         if (i == 1) {
             System.out.print("1");
@@ -111,8 +111,6 @@ public class Main {
 }
 /* output
 
-/Library/Java/JavaVirtualMachines/jdk-26.jdk/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=60709 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /Users/aidentsang/IdeaProjects/CS213_L2_AT/out/production/CS213_L2_AT Main
-
 Menu:
 1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
 2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
@@ -149,7 +147,6 @@ Goodbye!
 
 Process finished with exit code 0
 
-/Library/Java/JavaVirtualMachines/jdk-26.jdk/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=60764 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /Users/aidentsang/IdeaProjects/CS213_L2_AT/out/production/CS213_L2_AT Main
 
 Menu:
 1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
@@ -211,4 +208,3 @@ Goodbye!
 
 Process finished with exit code 0
 */
-
