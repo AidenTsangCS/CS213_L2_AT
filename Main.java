@@ -1,3 +1,6 @@
+// Aiden Tsang
+// Lab #2
+
 import java.util.Scanner;
 
 public class Main {
@@ -9,191 +12,149 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        runGame();
-    }
-
-    static void runGame() {
         Option choice = getChoice();
         while (choice != Option.QUIT) {
-            String password = getPassword();
             switch (choice) {
                 case PRODUCT:
-                    computeProduct(password, 0, 1);
+                    int nProduct = getNumberOfTerms();
+                    computeProduct(1, nProduct, 1);
                     break;
                 case SUM:
-                    computeSum(password, 0, 0.0);
+                    int nSum = getNumberOfTerms();
+                    computeSum(nSum, nSum, 0.0);
+                    break;
+                default:
                     break;
             }
-            password = "";
             choice = getChoice();
         }
-        System.out.println("Play again? (y/n):");
-        String answer = scanner.next();
-        if (answer.equals("y")) {
-            runGame();
-        } else {
-            System.out.println("Goodbye!");
-        }
-    }
-
-    static String getPassword() {
-        System.out.println("Enter an 8-digit number-only password:");
-        String password = scanner.next();
-        while (password.length() != 8 || !password.matches("[0-9]+")) {
-            System.out.println("Invalid. Password must be exactly 8 digits, numbers only:");
-            password = scanner.next();
-        }
-        return password;
+        System.out.println("Goodbye!");
     }
 
     static void printMenu() {
         System.out.println("\nMenu:");
-        for (Option opt : Option.values()) {
-            System.out.println((opt.ordinal() + 1) + ": " + opt);
-        }
+        System.out.println("1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)");
+        System.out.println("2: Sum series      1/(n*n) + ... + 1/(2*2) + 1");
+        System.out.println("3: Quit");
     }
 
     static Option getChoice() {
         printMenu();
-        System.out.println("Enter a number (1-" + Option.values().length + "):");
+        System.out.println("Enter a single digit (1-3):");
         int input = scanner.nextInt();
-        Option choice = null;
-        while (choice == null) {
-            if (input >= 1 && input <= Option.values().length) {
-                choice = Option.values()[input - 1];
-            } else {
-                System.out.println("Invalid. Enter a number (1-" + Option.values().length + "):");
-                input = scanner.nextInt();
-            }
+        while (input < 1 || input > Option.values().length) {
+            System.out.println("Invalid entry. Enter a single digit (1-3):");
+            input = scanner.nextInt();
         }
-        return choice;
+        return Option.values()[input - 1];
     }
 
-    static void computeProduct(String password, int index, long product) {
-        if (index < password.length()) {
-            int digit = Character.getNumericValue(password.charAt(index));
-            long updatedProduct = product;
-            if (index == 0) {
-                System.out.print(digit);
-                updatedProduct = digit;
+    static int getNumberOfTerms() {
+        System.out.println("Enter the number of terms (a whole number greater than 0):");
+        int n = scanner.nextInt();
+        while (n < 1) {
+            System.out.println("Invalid entry. Enter a whole number greater than 0:");
+            n = scanner.nextInt();
+        }
+        return n;
+    }
+
+    // Recursive: prints  1 * (1+2) * (2+3) * ... * ((n-1)+n) = product
+    // No other method calls, no loops. Term index i runs 1..n.
+    static void computeProduct(int i, int n, long product) {
+        if (i == 1) {
+            System.out.print("1");
+            computeProduct(i + 1, n, 1);
+        } else if (i <= n) {
+            long term = (long) (i - 1) + i;
+            System.out.print(" * (" + (i - 1) + "+" + i + ")");
+            long updated = product * term;
+            if (i == n) {
+                System.out.println("=" + updated);
             } else {
-                int prev = Character.getNumericValue(password.charAt(index - 1));
-                System.out.print(" * (" + prev + "+" + digit + ")");
-                updatedProduct = product * (prev + digit);
+                computeProduct(i + 1, n, updated);
             }
-            if (index == password.length() - 1) {
-                System.out.println("=" + updatedProduct);
-            }
-            computeProduct(password, index + 1, updatedProduct);
+        } else {
+            // n == 1 case: only the leading "1" was printed
+            System.out.println("=" + product);
         }
     }
 
-    static void computeSum(String password, int index, double sum) {
-        if (index < password.length()) {
-            int digit = Character.getNumericValue(password.charAt(index));
-            double updatedSum = sum + (digit == 0 ? 0 : 1.0 / (digit * digit));
-            if (index == 0) {
-                System.out.print("1/(" + digit + "*" + digit + ")");
-            } else if (index == password.length() - 1) {
-                System.out.print(digit == 1 ? "+1" : "+1/(" + digit + "*" + digit + ")");
-                System.out.println("=" + updatedSum);
+    // Recursive: prints  1/(n*n) + 1/((n-1)*(n-1)) + ... + 1/(2*2) + 1 = sum
+    // Counts down from n to 1. 1/(1*1) prints as "1". No other method calls, no loops.
+    static void computeSum(int i, int n, double sum) {
+        double updated = sum + 1.0 / ((double) i * i);
+        if (i == n) {
+            if (i == 1) {
+                System.out.print("1");
             } else {
-                System.out.print("+1/(" + digit + "*" + digit + ")");
+                System.out.print("1/(" + i + "*" + i + ")");
             }
-            computeSum(password, index + 1, updatedSum);
+        } else if (i == 1) {
+            System.out.print("+1");
+        } else {
+            System.out.print("+1/(" + i + "*" + i + ")");
+        }
+
+        if (i == 1) {
+            System.out.println("=" + updated);
+        } else {
+            computeSum(i - 1, n, updated);
         }
     }
 }
 
-/*OUTPUT
-/Library/Java/JavaVirtualMachines/jdk-26.jdk/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=57795 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /Users/aidentsang/IdeaProjects/CS213_L2_AT/out/production/CS213_L2_AT Main
+/* output
+ /Library/Java/JavaVirtualMachines/jdk-26.jdk/Contents/Home/bin/java -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:60551,suspend=y,server=n -javaagent:/Users/aidentsang/Library/Caches/JetBrains/IntelliJIdea2026.1/captureAgent/debugger-agent.jar=file:///var/folders/7h/zb8m39j50bv8h4rvtp0xh3jw0000gn/T/capture16129346501150614777.props -agentpath:/private/var/folders/7h/zb8m39j50bv8h4rvtp0xh3jw0000gn/T/idea_libasyncProfiler_dylib_temp_folder/libasyncProfiler.dylib=version,jfr,event=wall,interval=10ms,cstack=no,file=/Users/aidentsang/IdeaSnapshots/Main_2026_07_07_192356.jfr,log=/private/var/folders/7h/zb8m39j50bv8h4rvtp0xh3jw0000gn/T/Main_2026_07_07_192356.jfr.log.txt,logLevel=DEBUG -Dkotlinx.coroutines.debug.enable.creation.stack.trace=false -Ddebugger.agent.enable.coroutines=true -Dkotlinx.coroutines.debug.enable.flows.stack.trace=true -Dkotlinx.coroutines.debug.enable.mutable.state.flows.stack.trace=true -Ddebugger.async.stack.trace.for.all.threads=true -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /Users/aidentsang/IdeaProjects/CS213_L2_AT/out/production/CS213_L2_AT:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar Main
+Connected to the target VM, address: '127.0.0.1:60551', transport: 'socket'
 
 Menu:
-1: PRODUCT
-2: SUM
-3: QUIT
-Enter a number (1-3):
+1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
+2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
+3: Quit
+Enter a single digit (1-3):
 1
-Enter an 8-digit number-only password:
-13578545
-1 * (1+3) * (3+5) * (5+7) * (7+8) * (8+5) * (5+4) * (4+5)=6065280
+Enter the number of terms (a whole number greater than 0):
+10
+1 * (1+2) * (2+3) * (3+4) * (4+5) * (5+6) * (6+7) * (7+8) * (8+9) * (9+10)=654729075
 
 Menu:
-1: PRODUCT
-2: SUM
-3: QUIT
-Enter a number (1-3):
-1
-Enter an 8-digit number-only password:
-12345678910
-Invalid. Password must be exactly 8 digits, numbers only:
-90764324
-9 * (9+0) * (0+7) * (7+6) * (6+4) * (4+3) * (3+2) * (2+4)=15479100
-
-Menu:
-1: PRODUCT
-2: SUM
-3: QUIT
-Enter a number (1-3):
-1
-Enter an 8-digit number-only password:
-123a4567
-Invalid. Password must be exactly 8 digits, numbers only:
-12345678
-1 * (1+2) * (2+3) * (3+4) * (4+5) * (5+6) * (6+7) * (7+8)=2027025
-
-Menu:
-1: PRODUCT
-2: SUM
-3: QUIT
-Enter a number (1-3):
+1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
+2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
+3: Quit
+Enter a single digit (1-3):
 2
-Enter an 8-digit number-only password:
-13246456
-1/(1*1)+1/(3*3)+1/(2*2)+1/(4*4)+1/(6*6)+1/(4*4)+1/(5*5)+1/(6*6)=1.5816666666666666
+Enter the number of terms (a whole number greater than 0):
+10
+1/(10*10)+1/(9*9)+1/(8*8)+1/(7*7)+1/(6*6)+1/(5*5)+1/(4*4)+1/(3*3)+1/(2*2)+1=1.5497677311665408
 
 Menu:
-1: PRODUCT
-2: SUM
-3: QUIT
-Enter a number (1-3):
-2
-Enter an 8-digit number-only password:
-1432435645697
-Invalid. Password must be exactly 8 digits, numbers only:
-19384567
-1/(1*1)+1/(9*9)+1/(3*3)+1/(8*8)+1/(4*4)+1/(5*5)+1/(6*6)+1/(7*7)=1.2897677311665408
-
-Menu:
-1: PRODUCT
-2: SUM
-3: QUIT
-Enter a number (1-3):
-2
-Enter an 8-digit number-only password:
-134m34234
-Invalid. Password must be exactly 8 digits, numbers only:
-33233333
-1/(3*3)+1/(3*3)+1/(2*2)+1/(3*3)+1/(3*3)+1/(3*3)+1/(3*3)+1/(3*3)=1.027777777777778
-
-Menu:
-1: PRODUCT
-2: SUM
-3: QUIT
-Enter a number (1-3):
+1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
+2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
+3: Quit
+Enter a single digit (1-3):
 3
-Play again? (y/n):
-y
-
-Menu:
-1: PRODUCT
-2: SUM
-3: QUIT
-Enter a number (1-3):
-3
-Play again? (y/n):
-n
 Goodbye!
+Disconnected from the target VM, address: '127.0.0.1:60551', transport: 'socket'
 
 Process finished with exit code 0
- */
+
+/Library/Java/JavaVirtualMachines/jdk-26.jdk/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=60592 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /Users/aidentsang/IdeaProjects/CS213_L2_AT/out/production/CS213_L2_AT Main
+
+Menu:
+1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
+2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
+3: Quit
+Enter a single digit (1-3):
+a
+Exception in thread "main" java.util.InputMismatchException
+	at java.base/java.util.Scanner.throwFor(Scanner.java:977)
+	at java.base/java.util.Scanner.next(Scanner.java:1632)
+	at java.base/java.util.Scanner.nextInt(Scanner.java:2297)
+	at java.base/java.util.Scanner.nextInt(Scanner.java:2251)
+	at Main.getChoice(Main.java:44)
+	at Main.main(Main.java:15)
+
+Process finished with exit code 1
+*/
+
