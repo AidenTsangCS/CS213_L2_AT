@@ -182,5 +182,66 @@ Goodbye!
 
 Process finished with exit code 0
 
+/Library/Java/JavaVirtualMachines/jdk-26.jdk/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=60764 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /Users/aidentsang/IdeaProjects/CS213_L2_AT/out/production/CS213_L2_AT Main
+
+Menu:
+1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
+2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
+3: Quit
+Enter a single digit (1-3):
+1
+Enter the number of terms (a whole number greater than 0):
+5
+1 * (1+2) * (2+3) * (3+4) * (4+5)=945
+
+Menu:
+1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
+2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
+3: Quit
+Enter a single digit (1-3):
+2
+Enter the number of terms (a whole number greater than 0):
+3
+1/(3*3)+1/(2*2)+1=1.3611111111111112
+
+Menu:
+1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
+2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
+3: Quit
+Enter a single digit (1-3):
+5
+Invalid entry. Enter a single digit (1-3):
+1
+Enter the number of terms (a whole number greater than 0):
+-1
+Invalid entry. Enter a whole number greater than 0:
+2
+1 * (1+2)=3
+
+Menu:
+1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
+2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
+3: Quit
+Enter a single digit (1-3):
+-1
+Invalid entry. Enter a single digit (1-3):
+5
+Invalid entry. Enter a single digit (1-3):
+2
+Enter the number of terms (a whole number greater than 0):
+-1
+Invalid entry. Enter a whole number greater than 0:
+5
+1/(5*5)+1/(4*4)+1/(3*3)+1/(2*2)+1=1.4636111111111112
+
+Menu:
+1: Product series  1 * (1+2) * (2+3) * ... * ((n-1)+n)
+2: Sum series      1/(n*n) + ... + 1/(2*2) + 1
+3: Quit
+Enter a single digit (1-3):
+3
+Goodbye!
+
+Process finished with exit code 0
 */
 
